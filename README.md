@@ -10,7 +10,7 @@
 **The ultimate ad-free music experience for your Discord server.**  
 Stable. Fast. Feature-Rich.
 
-[**🔗 INVITE AZIX TO YOUR SERVER**](https://discord.com/api/oauth2/authorize?client_id=1320392323363606558&permissions=8&scope=bot%20applications.commands)
+[**🔗 INVITE AZIX TO YOUR SERVER**](https://discord.com/oauth2/authorize?client_id=1452750685564305631&permissions=8&integration_type=0&scope=bot+applications.commands)
 
 [Report Bug](https://github.com/SaurishS/AZIX-Music/issues) · [Request Feature](https://github.com/SaurishS/AZIX-Music/issues)
 
