@@ -6,6 +6,10 @@ import { Command } from './types';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import * as crypto from 'crypto';
+
+// GLOBAL FIX: Ensure crypto is available for discord-player
+(global as any).crypto = crypto;
 
 dotenv.config();
 
