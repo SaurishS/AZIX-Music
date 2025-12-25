@@ -88,5 +88,12 @@ const client = new ExtendedClient();
     process.on('uncaughtException', (error) => console.error('Uncaught Exception:', error));
     process.on('unhandledRejection', (reason) => console.error('Unhandled Rejection:', reason));
 
-    client.login(process.env.DISCORD_TOKEN);
+    const token = process.env.DISCORD_TOKEN?.trim();
+    if (!token) {
+        console.error('❌ FATAL ERROR: DISCORD_TOKEN is missing in environment variables!');
+        process.exit(1);
+    }
+
+    console.log(`Logging in with token (Length: ${token.length})...`);
+    client.login(token);
 })();
