@@ -5,10 +5,12 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Discord.js](https://img.shields.io/badge/Discord.js-5865F2?style=for-the-badge&logo=discord&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)
+![Verified](https://img.shields.io/badge/Verified-Success?style=for-the-badge&logo=discord&logoColor=white)
 
 **The ultimate ad-free music experience for your Discord server.**  
 Stable. Fast. Feature-Rich.
+
+[**🔗 INVITE AZIX TO YOUR SERVER**](https://discord.com/api/oauth2/authorize?client_id=1320392323363606558&permissions=8&scope=bot%20applications.commands)
 
 [Report Bug](https://github.com/SaurishS/AZIX-Music/issues) · [Request Feature](https://github.com/SaurishS/AZIX-Music/issues)
 
@@ -16,16 +18,16 @@ Stable. Fast. Feature-Rich.
 
 ---
 
-## ✨ Features
+## ✨ Why Azix?
 
-- **🚫 Zero Ads:** Built-in advanced ad-blocking logic using `yt-dlp` and `play-dl`.
-- **🎧 Multi-Source Support:**
-  - **YouTube:** Videos, Playlists, Mixes.
-  - **Spotify:** Tracks, Albums, Large Playlists (200+ songs).
-  - **SoundCloud:** Full support.
-- **📜 Instant Lyrics:** Fetch lyrics for the current song or any query via Genius.
-- **⚡ Smart Queue:** Drag-and-drop simulation (`/move`), pagination, and shuffle/loop modes.
-- **🎹 24/7 Stability:** Auto-reconnection logic and efficient resource management.
+- **🚫 Zero Ads:** Built-in advanced ad-blocking logic ensures your listening experience is never interrupted.
+- **🎧 Universal Support:**
+  - **YouTube:** Play videos, playlists, and mixes seamlessly.
+  - **Spotify:** Full support for tracks, albums, and massive playlists (200+ songs).
+  - **SoundCloud:** High-quality streaming.
+- **📜 Instant Lyrics:** Fetch lyrics for any song in real-time with `/lyrics`.
+- **⚡ Smart Queue:** Drag-and-drop simulation (`/move`), smart pagination, and shuffle/loop modes.
+- **🎹 24/7 Stability:** Hosted on high-performance infrastructure for lag-free audio.
 
 ---
 
@@ -50,49 +52,29 @@ Stable. Fast. Feature-Rich.
 
 ---
 
-## 🚀 Deployment
+## 🛠️ Self-Hosting (Optional)
 
-### Option 1: One-Click Deploy (Railway)
+Azix is open-source! If you prefer to host your own instance, you can do so easily.
 
-The easiest way to host Azix 24/7.
+### Prerequisites
+- Node.js 18+
+- FFMPEG
+- Python 3
 
-1. Fork this repository.
-2. Sign up on [Railway](https://railway.app).
-3. Create a **New Project** → **Deploy from GitHub**.
-4. Add the following **Environment Variables**:
-
-| Variable | Description |
-| :--- | :--- |
-| `DISCORD_TOKEN` | Your Bot Token from the Discord Developer Portal. |
-| `SPOTIFY_CLIENT_ID` | Your Spotify App Client ID. |
-| `SPOTIFY_CLIENT_SECRET` | Your Spotify App Client Secret. |
-| `YOUTUBE_API_KEY` | (Optional) For higher search accuracy. |
-| `DP_FORCE_YTDL_MOD` | Set strictly to `play-dl`. |
-
-### Option 2: Self-Hosting (Docker)
-
+### Quick Start
 ```bash
 # 1. Clone the repo
 git clone https://github.com/SaurishS/AZIX-Music.git
 cd AZIX-Music
 
-# 2. Build the image
-docker build -t azix-music .
-
-# 3. Run container (Pass env vars)
-docker run -d --env-file .env azix-music
-```
-
-### Option 3: Local Development
-
-```bash
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Build the project
-npm run build
+# 3. Configure .env
+# (See .env.example)
 
-# Start the bot
+# 4. Build & Start
+npm run build
 npm start
 ```
 
@@ -106,5 +88,5 @@ npm start
 ---
 
 <div align="center">
-Made with ❤️ by Saurish
+Made with ❤️ by BlueFlameGO
 </div>
