@@ -8,8 +8,8 @@ module.exports = {
     max_memory_restart: "1G",
     env: {
       NODE_ENV: "production",
-      // These will be loaded from your .env file on the server, 
-      // or you can hardcode them here (not recommended for secrets)
+      // These will be loaded from the .env file on the server, 
+      // or they can be hardcoded here (not recommended for secrets)
     }
   }]
 };
