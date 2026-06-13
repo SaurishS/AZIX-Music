@@ -9,7 +9,9 @@ import dotenv from 'dotenv';
 import * as crypto from 'crypto';
 
 // GLOBAL FIX: Ensure crypto is available for discord-player
-(global as any).crypto = crypto;
+if (!(global as any).crypto) {
+    (global as any).crypto = crypto;
+}
 
 dotenv.config();
 
@@ -34,11 +36,15 @@ export class ExtendedClient extends Client {
         this.player = new Player(this);
 
         this.player.events.on('error', (queue, error) => {
-            console.log(`[${queue.guild.name}] Error emitted from the queue: ${error.message}`);
+            console.log(`[${queue.guild.name}] Error emitted from the queue:`, error);
         });
 
         this.player.events.on('playerError', (queue, error) => {
-            console.log(`[${queue.guild.name}] Player Error: ${error.message}`);
+            console.log(`[${queue.guild.name}] Player Error:`, error);
+        });
+
+        this.player.on('debug', (message) => {
+            console.log(`[Player Debug] ${message}`);
         });
 
         this.player.events.on('playerStart', (queue, track) => {

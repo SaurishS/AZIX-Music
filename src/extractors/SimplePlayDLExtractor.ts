@@ -66,34 +66,65 @@ export default class SimplePlayDLExtractor extends BaseExtractor {
         }
     }
 
-    async stream(info: Track): Promise<ExtractorStreamable> {
-        try {
-            console.log(`[SimplePlayDLExtractor] Using yt-dlp for: ${info.url}`);
-            
-            // fetch the raw audio url using yt-dlp
-            // We use specific flags to ensure we get the direct audio stream, bypassing ads.
-            const output = await youtubedl(info.url, {
-                getUrl: true,
-                format: 'bestaudio',
-                noWarnings: true,
-                audioQuality: 0,
-                noPlaylist: true, // Ensure we don't get a playlist mix
-                noCheckCertificates: true, // Avoid SSL hurdles that might redirect
-            });
-
-            const rawUrl = (output as unknown as string).trim(); 
-            console.log('[SimplePlayDLExtractor] yt-dlp URL fetched successfully.');
-            
-            return rawUrl;
-        } catch (e) {
-            console.error('[SimplePlayDLExtractor] yt-dlp failed:', e);
-            throw e;
+    private async getYoutubeStream(url: string): Promise<ExtractorStreamable> {
+        // Clean the URL to remove extra parameters that might confuse play-dl
+        let cleanUrl = url;
+        const videoIdMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+        if (videoIdMatch) {
+            cleanUrl = `https://www.youtube.com/watch?v=${videoIdMatch[1]}`;
         }
+
+        try {
+            console.log(`[SimplePlayDLExtractor] Fetching stream for: ${url}`);
+            console.log(`[SimplePlayDLExtractor] Attempting play-dl stream for: ${cleanUrl}`);
+            
+            const stream = await play.stream(cleanUrl, { quality: 2 });
+            
+            if (stream && stream.stream) {
+                console.log('[SimplePlayDLExtractor] play-dl stream fetched successfully.');
+                return stream.stream;
+            }
+            throw new Error('play-dl returned an empty stream');
+
+        } catch (e: any) {
+            console.error('[SimplePlayDLExtractor] play-dl failed:', e.message || e);
+            
+            // FALLBACK to yt-dlp
+            try {
+                console.log(`[SimplePlayDLExtractor] Falling back to yt-dlp for: ${cleanUrl}`);
+                const output = await youtubedl(cleanUrl, {
+                    getUrl: true,
+                    format: 'bestaudio/best', // Highest quality audio
+                    noWarnings: true,
+                    audioQuality: 0, // Highest quality
+                    noPlaylist: true,
+                    noCheckCertificates: true,
+                    preferFreeFormats: true,
+                });
+
+                const rawUrl = (output as unknown as string).trim(); 
+                if (!rawUrl || !rawUrl.startsWith('http')) {
+                    throw new Error(`Invalid URL returned from yt-dlp: ${rawUrl}`);
+                }
+
+                console.log(`[SimplePlayDLExtractor] yt-dlp URL fetched: ${rawUrl.substring(0, 100)}...`);
+                
+                return rawUrl;
+            } catch (fallbackError: any) {
+                console.error('[SimplePlayDLExtractor] yt-dlp fallback also failed:', fallbackError.message || fallbackError);
+                throw fallbackError;
+            }
+        }
+    }
+
+    async stream(info: Track): Promise<ExtractorStreamable> {
+        return this.getYoutubeStream(info.url);
     }
 
     async bridge(track: Track, _sourceExtractor: BaseExtractor | null): Promise<ExtractorStreamable | null> {
         try {
-            const query = `${track.title} ${track.author} official audio`;
+            // Prioritize 'official audio' and 'lyrics' to avoid music video cinematic intros/outros
+            const query = `${track.title} ${track.author} official audio lyrics`;
             console.log(`[Spotify Bridge] Searching YouTube for: ${query}`);
             
             let videoUrl = '';
@@ -126,17 +157,7 @@ export default class SimplePlayDLExtractor extends BaseExtractor {
 
             if (!videoUrl) return null;
 
-            // We fetch the stream right now to satisfy the ExtractorStreamable requirement
-            const output = await youtubedl(videoUrl, {
-                getUrl: true,
-                format: 'bestaudio',
-                noWarnings: true,
-                audioQuality: 0, 
-                noPlaylist: true,
-                noCheckCertificates: true,
-            });
-
-            return (output as unknown as string).trim();
+            return this.getYoutubeStream(videoUrl);
         } catch (e) {
             console.error('[Spotify Bridge] Bridging failed:', e);
             return null;
